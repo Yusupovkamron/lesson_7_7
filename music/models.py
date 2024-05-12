@@ -15,6 +15,12 @@ class Albom(models.Model):
     create_data = models.DateField(auto_now_add=True)
 
 
+    class Meta:
+        ordering = ['id']
+        indexes = [
+            models.Index(fields=['id'])
+        ]
+
 
 
 

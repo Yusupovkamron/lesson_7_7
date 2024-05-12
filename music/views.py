@@ -34,6 +34,15 @@ class AlbomAPIViewSet(ModelViewSet):
     queryset = Albom.objects.all()
     serializer_class = AlbomSerializer
 
+    @action(detail=True, methods=["GET"])
+    def albom(self, request, *args, **kwargs):
+        song = self.get_object()
+        albom = song.albom
+        serializer = AlbomSerializer(albom)
+        return Response(data=serializer.data)
+
+
+
 
 class SongSetAPIView(ModelViewSet):
     queryset = Songs.objects.all()
@@ -54,6 +63,9 @@ class SongSetAPIView(ModelViewSet):
     @action(detail=False, methods=["GET"])
     def top(self, request, *args, **kwargs):
         songs = self.get_queryset()
+        songs = songs.order_by('-listened')[:2]
+        serializer = SongsSerializer(songs, many=True)
+        return Response(data=serializer.data)
 
 class CountrySetApiView(ModelViewSet):
     queryset = Country.objects.all()
